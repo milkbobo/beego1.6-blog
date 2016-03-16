@@ -101,13 +101,60 @@ func (c *UserController) Register() {
 
 }
 
+func (c *UserController) Login() {
+	ret := RET{
+		Ok:      true,
+		Content: "success",
+	}
+
+	defer func() {
+		//函数最后执行
+		c.Data["json"] = ret
+		c.ServeJSON()
+	}()
+
+	id := c.GetString("userid")
+	pwd := c.GetString("password")
+
+	valid := validation.Validation{}
+
+	valid.Required(id, "UserId")
+	valid.Required(pwd, "pasword")
+
+	valid.MaxSize(pwd, 30, "Password")
+
+	u := &class.User{Id: id}
+
+	switch {
+	case valid.HasErrors():
+
+	case u.ReadDb() != nil:
+		valid.Error("用户不存在")
+	case PwCheck(pwd, u.Password) == false:
+		valid.Error("密码错误")
+	default:
+		c.DoLogin(*u)
+		ret.Ok = true
+		return
+	}
+
+	ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
+	ret.Ok = false
+	return
+}
+
 func PwGen(pass string) string {
 	salt := strconv.FormatInt(time.Now().UnixNano()%9000+1000, 10)
 	return Base64Encode(Sha1(Md5(pass)+salt) + salt)
 }
 
-func (c *UserController) Login() {
-	c.ServeJSON()
+func PwCheck(pwd, saved string) bool {
+	saved = Base64Decode(saved)
+	if len(saved) < 4 {
+		return false
+	}
+	salt := saved[len(saved)-4:]
+	return Sha1(Md5(pwd)+salt)+salt == saved
 }
 
 func Sha1(s string) string {
