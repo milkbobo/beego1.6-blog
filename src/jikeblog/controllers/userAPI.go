@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	. "fmt"
 	"jikeblog/models/class"
+
 	"strconv"
 	"time"
 
@@ -141,6 +142,57 @@ func (c *UserController) Login() {
 	ret.Content = valid.Errors[0].Key + valid.Errors[0].Message
 	ret.Ok = false
 	return
+}
+
+func (c *UserController) Logout() {
+	c.DoLogout()
+}
+
+func (c *UserController) Setting() {
+
+	c.CheckLogin()
+
+	switch c.GetString("do") {
+	case "info":
+		c.SettingInfo()
+	case "chpwd":
+		c.SettingPwd()
+	}
+
+}
+
+func (c *UserController) SettingInfo() {
+	user := c.GetSession("user").(class.User)
+
+	user.Nick = c.GetString("nick")
+	user.Email = c.GetString("email")
+	user.Url = c.GetString("url")
+	user.Hobby = c.GetString("hobby")
+
+	user.Update()
+	c.DoLogin(user)
+
+	ret := RET{
+		Ok: true,
+	}
+
+	c.Data["json"] = ret
+
+	c.ServeJSON()
+}
+func (c *UserController) SettingPwd() {
+	user := c.GetSession("user").(class.User)
+
+	user.Password = PwGen(c.GetString("pwd2"))
+	user.Update()
+	c.DoLogin(user)
+
+	ret := RET{
+		Ok: true,
+	}
+
+	c.Data["json"] = ret
+	c.ServeJSON()
 }
 
 func PwGen(pass string) string {
