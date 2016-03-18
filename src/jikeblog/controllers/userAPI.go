@@ -129,7 +129,7 @@ func (c *UserController) Login() {
 	switch {
 	case valid.HasErrors():
 
-	case u.ReadDb() != nil:
+	case u.ReadDB() != nil:
 		valid.Error("用户不存在")
 	case PwCheck(pwd, u.Password) == false:
 		valid.Error("密码错误")

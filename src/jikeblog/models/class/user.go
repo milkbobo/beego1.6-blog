@@ -36,7 +36,7 @@ const (
 	DefaultPvt = 1<<3 - 1
 )
 
-func (u *User) ReadDb() (err error) {
+func (u *User) ReadDB() (err error) {
 	o := orm.NewOrm()
 	err = o.Read(u)
 	return

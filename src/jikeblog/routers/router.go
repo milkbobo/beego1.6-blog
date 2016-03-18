@@ -16,6 +16,10 @@ func init() {
 
 	beego.Router("/setting", &controllers.UserController{}, `get:PageSetting;post:Setting`)
 
+	beego.Router("/article/new", &controllers.ArticleController{}, `get:PageNew;post:New`)
+	beego.Router("/article/:id([0-9]+)", &controllers.ArticleController{}, `get:Get`)
+	beego.Router("/article/edit/:id([0-9]+)", &controllers.ArticleController{}, `get:PageEdit;post:Edit`)
+
 	beego.Router("/user/profile", &controllers.UserController{}, `get:Profile`)
 	beego.Router("/api/user/profile", &controllers.UserController{}, `get:API_Profile`)
 }
