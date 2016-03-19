@@ -53,8 +53,9 @@ func (a Article) Delete() (err error) {
 	return
 }
 
+//高级查询，筛选用户
 func (a Article) Gets() (ret []Article) {
 	o := orm.NewOrm()
-	o.QueryTable("article").Filter("Author", a.Author).Filter("defunct", 0).All(&ret)
+	o.QueryTable("article").Filter("Author", a.Author).Filter("defunct", 0).Filter("defunct", 0).All(&ret)
 	return
 }

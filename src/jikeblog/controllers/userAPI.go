@@ -80,9 +80,6 @@ func (c *UserController) Register() {
 			Private:  class.DefaultPvt, //默认权限
 		}
 
-		Println("OK")
-		Println(class.DefaultPvt)
-
 		switch {
 		case u.ExistId():
 			valid.Error("用户名被占用")
@@ -125,6 +122,10 @@ func (c *UserController) Login() {
 	valid.MaxSize(pwd, 30, "Password")
 
 	u := &class.User{Id: id}
+
+	Println("OK")
+	Println(u)
+	Sprint(u)
 
 	switch {
 	case valid.HasErrors():
