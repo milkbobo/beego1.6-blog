@@ -12,6 +12,6 @@ func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", "root:@tcp(localhost:3306)/jblog?charset=utf8&loc=Asia%2FShanghai")
 
-	orm.RegisterModel(new(class.User), new(class.Article))
+	orm.RegisterModel(new(class.User), new(class.Article), new(class.Tag))
 	orm.RunSyncdb("default", false, true)
 }

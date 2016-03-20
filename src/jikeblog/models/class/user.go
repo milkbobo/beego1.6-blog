@@ -36,6 +36,11 @@ const (
 	DefaultPvt = 1<<3 - 1
 )
 
+// 设置引擎为 INNODB
+// 解决Specified key was too long max key length is 1000 bytes 的错误
+func (u *User) TableEngine() string {
+	return "INNODB"
+}
 func (u *User) ReadDB() (err error) {
 	o := orm.NewOrm()
 	err = o.Read(u)

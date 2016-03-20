@@ -15,7 +15,7 @@ type Article struct {
 	Replys  int
 	Views   int
 
-	Tag string
+	Tags []*Tag `orm:"rel(m2m)"`
 
 	Time time.Time `orm:"auto_now_add;type(datatime)"`
 
